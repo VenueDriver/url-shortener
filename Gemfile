@@ -38,3 +38,10 @@ gem 'spring',        group: :development
 # Use debugger
 # gem 'debugger', group: [:development, :test]
 
+# For working with production environments.
+group :development do
+  gem 'engineyard'
+end
+
+# For execjs.
+gem "therubyracer"
