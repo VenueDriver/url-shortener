@@ -62,7 +62,7 @@ Vagrant.configure("2") do |config|
   # some recipes and/or roles.
 
   # Un-comment this to update portage during provisioning.  Good to run this at least once.  Slow.
-  # config.vm.provision :shell, :inline => "emerge --sync"
+  config.vm.provision :shell, :inline => "emerge --sync && emerge --oneshot portage"
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks/development"

@@ -1,3 +1,5 @@
+package "dev-db/postgresql-server"
+
 execute "rubygems" do
   user "root"
   command "gem update --system 2.1.0"
