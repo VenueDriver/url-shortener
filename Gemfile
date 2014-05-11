@@ -29,15 +29,6 @@ gem 'spring',        group: :development
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
-# Use unicorn as the app server
-# gem 'unicorn'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
-
-# Use debugger
-# gem 'debugger', group: [:development, :test]
-
 # For working with production environments.
 group :development do
   gem 'engineyard'
@@ -48,3 +39,6 @@ gem "therubyracer"
 
 # URL shortner.
 gem 'shortener', '~> 0.3.0'
+
+# Twitter Bootstrap.
+gem 'twitter-bootstrap-rails', '~> 2.2.8'

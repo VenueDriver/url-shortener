@@ -1,24 +1,24 @@
 class UrlsController < ApplicationController
-  before_action :set_url, only: [:show, :edit, :update, :destroy]
+  skip_before_action :verify_authenticity_token
 
-  # GET /urls/new
+  def index
+    redirect_to '/'
+  end
+
   def new
   end
 
-  # POST /urls
-  # POST /urls.json
   def create
-    @url = Url.new(url_params)
+    @url = Shortener::ShortenedUrl.generate(params['url'])
+    session['url'] = params['url']
 
     respond_to do |format|
-      if @url.save
-        format.html { redirect_to @url, notice: 'Url was successfully created.' }
-        format.json { render :show, status: :created, location: @url }
-      else
-        format.html { render :new }
-        format.json { render json: @url.errors, status: :unprocessable_entity }
-      end
+      format.html { render :show }
     end
+  end
+
+  def show
+    @url = Shortener::ShortenedUrl.generate(session['url'])
   end
 
 end
