@@ -45,3 +45,6 @@ end
 
 # For execjs.
 gem "therubyracer"
+
+# URL shortner.
+gem 'shortener', '~> 0.3.0'
