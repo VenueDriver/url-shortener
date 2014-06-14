@@ -1,4 +1,8 @@
-package "dev-db/postgresql-server"
+package "postgresql"
+
+package "g++"
+
+package "libpq-dev"
 
 execute "rubygems" do
   user "root"

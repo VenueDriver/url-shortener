@@ -8,13 +8,14 @@
 Vagrant.configure("2") do |config|
   
   # Every Vagrant virtual environment requires a box to build off of.
-  config.vm.box = "gentoo-latest-i686"
+  #config.vm.box = "gentoo-latest-i686"
+  config.vm.box = "ubuntu-13.04-mini-i386"
 
   # The url from where the 'config.vm.box' box will be fetched if it
   # doesn't already exist on the user's system.
   #config.vm.box_url = "https://opscode-vm.s3.amazonaws.com/vagrant/opscode_ubuntu-12.04-i386_provisionerless.box"
   config.vm.box_url =
-    "https://dl.dropboxusercontent.com/s/xfl63k64zliixid/gentoo-20131029-i686.box"
+    "https://dl.dropboxusercontent.com/u/4387941/vagrant-boxes/ubuntu-13.04-mini-i386.box"
 
   # This can be set to the host name you wish the guest machine to have. Vagrant
   # will automatically execute the configuration necessary to make this happen.
@@ -62,7 +63,7 @@ Vagrant.configure("2") do |config|
   # some recipes and/or roles.
 
   # Un-comment this to update portage during provisioning.  Good to run this at least once.  Slow.
-  config.vm.provision :shell, :inline => "emerge --sync && emerge --oneshot portage"
+  config.vm.provision :shell, :inline => "apt-get upgrade"
 
   config.vm.provision :chef_solo do |chef|
     chef.cookbooks_path = "cookbooks/development"
