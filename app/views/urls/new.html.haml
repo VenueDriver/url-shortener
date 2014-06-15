@@ -1,0 +1,9 @@
+.span-12.hero-unit
+  %h1 Hkk.sn
+  %p Private Hakkasan URL shortener.
+  %form{action: "urls", method: "post"}
+    %fieldset
+      %legend Add a new new URL to the database:
+      %label URL:
+      %input{name: "url", placeholder: "Type something…", type: "text"}/
+      %button.btn.btn-primary.btn-large{type: "submit"} Create URL

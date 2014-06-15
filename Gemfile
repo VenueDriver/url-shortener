@@ -11,6 +11,9 @@ group :production, :staging do
   gem 'pg'
 end
 
+# Use HAML
+gem 'haml', '~> 4.0.5'
+gem 'haml-rails', '~> 0.5.3'
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 4.0.3'
 # Use Uglifier as compressor for JavaScript assets
