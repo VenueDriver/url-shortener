@@ -48,6 +48,3 @@ gem "therubyracer"
 
 # URL shortner.
 gem 'shortener', '~> 0.3.0'
-
-# Twitter Bootstrap.
-gem 'twitter-bootstrap-rails', '~> 2.2.8'

@@ -27,7 +27,23 @@
     = favicon_link_tag 'favicon.ico', :rel => 'shortcut icon'
     = javascript_include_tag "application"
   %body
-    .container-fluid
-      .row-fluid
-        = yield
+    .container
+  
+      %nav.navbar.navbar-default{role: "navigation"}
+        .container-fluid
+          .navbar-header
+            %button.navbar-toggle{"data-toggle" => "collapse", type: "button", 'data-target'=>"#navbar-collapse"}
+              %span.sr-only Toggle navigation
+              %span.icon-bar
+              %span.icon-bar
+              %span.icon-bar
+            %a.navbar-brand{href: "#"} Hkk.sn
+          #navbar-collapse.collapse.navbar-collapse
+            %ul.nav.navbar-nav
+              %li{ :class => active_if(action: 'index') }
+                %a{href: '/'} URLs
+              %li{ :class => active_if(action: ['new', 'create']) }
+                %a{href: "/urls/new"} Create
+  
+      = yield
     / /container

@@ -2,10 +2,6 @@ class UrlsController < ApplicationController
   http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password')
   skip_before_action :verify_authenticity_token
 
-  def index
-    redirect_to '/'
-  end
-
   def new
   end
 

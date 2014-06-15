@@ -1,9 +1,73 @@
-.span-12.hero-unit
-  %h1 Hkk.sn
-  %p Private Hakkasan URL shortener.
-  %form{action: "urls", method: "post"}
-    %fieldset
-      %legend Add a new new URL to the database:
-      %label URL:
-      %input{name: "url", placeholder: "Type something…", type: "text"}/
-      %button.btn.btn-primary.btn-large{type: "submit"} Create URL
+.panel.panel-default
+  .panel-heading
+    %h3.panel-title Shorten a new URL into an Hkk.sn link:
+
+  .panel-body
+    %form.form-horizontal{role: "form"}
+
+      .form-group
+        %label.col-sm-2.control-label{for: "url"} URL
+        .col-sm-10
+          %input.form-control{name: "url", placeholder: "http://...", type: "text"}
+
+      .form-group
+        %label.col-sm-2.control-label{for: "short_code"} Short Code
+        .col-sm-10
+          %input.form-control{name: "short_code", placeholder: "(optional) tiestopromo, nye2014, freestuff", type: "text"}
+
+      .panel.panel-default
+        .panel-heading
+          Google Analytics UTM parameters (optional)
+
+        .panel-body
+          - utm_help = 'https://support.google.com/analytics/answer/1033867'
+
+          .form-group
+            %label.col-sm-2.control-label{for: "utm_source"} Source
+            .col-sm-10
+              .input-group.input-group-sm
+                %input.form-control{name: 'utm_source', placeholder: 'referrer: google, citysearch, newsletter4', type: 'text'}/
+                %span.input-group-addon
+                  %a{href: utm_help, target: 'utm_help'}
+                    %span.glyphicon.glyphicon-question-sign
+
+          .form-group
+            %label.col-sm-2.control-label{for: "utm_medium"} Medium
+            .col-sm-10
+              .input-group.input-group-sm
+                %input.form-control{name: 'utm_medium', placeholder: 'marketing medium: cpc, banner, email', type: 'text'}/
+                %span.input-group-addon
+                  %a{href: utm_help, target: 'utm_help'}
+                    %span.glyphicon.glyphicon-question-sign
+
+          .form-group
+            %label.col-sm-2.control-label{for: "utm_term"} Term
+            .col-sm-10
+              .input-group.input-group-sm
+                %input.form-control{name: 'utm_term', placeholder: 'identify the paid keywords: running+shoes', type: 'text'}/
+                %span.input-group-addon
+                  %a{href: utm_help, target: 'utm_help'}
+                    %span.glyphicon.glyphicon-question-sign
+
+          .form-group
+            %label.col-sm-2.control-label{for: "utm_content"} Content
+            .col-sm-10
+              .input-group.input-group-sm
+                %input.form-control{name: 'utm_content', placeholder: 'use to differentiate ads: logolink, textlink', type: 'text'}/
+                %span.input-group-addon
+                  %a{href: utm_help, target: 'utm_help'}
+                    %span.glyphicon.glyphicon-question-sign
+
+          .form-group
+            %label.col-sm-2.control-label{for: "utm_name"} Name
+            .col-sm-10
+              .input-group.input-group-sm
+                %input.form-control{name: 'utm_name', placeholder: 'use for keyword analysis: product, promo code, or slogan', type: 'text'}/
+                %span.input-group-addon
+                  %a{href: utm_help, target: 'utm_help'}
+                    %span.glyphicon.glyphicon-question-sign
+
+  .panel-footer
+    .form-group
+      %button.btn.btn-primary.btn-large.pull-right{type: "submit"} Create URL
+      .clearfix
