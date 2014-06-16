@@ -1,7 +1,7 @@
 class Setting < ActiveRecord::Base
 
   def self.value(key)
-    value = find_by_key(key).value
+    value = where(key: key).first
     return value unless value.nil?
     "#{key}-default"
   end
