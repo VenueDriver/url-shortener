@@ -1,10 +1,10 @@
 .span-12.jumbotron
   .well.well-lg
-    %a.short_url{href: "/#{@url.unique_key}"}
+    %a.short_url{href: "/#{@url.unique_key}", target:@url.unique_key}
       = domain_name + '/' + @url.unique_key
   %p
     Full URL:
-    %a{href: full_url(@url)}
+    %a{href: full_url(@url), target:@url.unique_key}
       = full_url(@url).truncate(50)
 
   %btn-toolbar.pull-right
