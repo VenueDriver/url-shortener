@@ -1,8 +1,8 @@
 class Setting < ActiveRecord::Base
 
   def self.value(key)
-    value = where(key: key).first
-    return value unless value.nil?
+    setting = where(key: key).first
+    return setting.value unless setting.nil?
     "#{key}-default"
   end
 

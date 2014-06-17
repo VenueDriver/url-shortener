@@ -1,10 +1,18 @@
 Rails.application.routes.draw do
-  resources :urls
+
+  resources 'shortener/shortened_urls',
+    as: 'shortener_shortened_urls',
+    controller: 'urls',
+    path: 'urls' do
+    member do
+      get 'expand'
+    end
+  end
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
-  get '/:id' => "shortener/shortened_urls#show"
+  get '/:id' => "urls#expand"
 
   # You can have the root of your site routed with "root"
   root 'urls#index'

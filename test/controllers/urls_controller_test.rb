@@ -2,7 +2,12 @@ require 'test_helper'
 
 class UrlsControllerTest < ActionController::TestCase
   setup do
-    @url = urls(:one)
+    # Simulate an authenticated user.
+    request.env['HTTP_AUTHORIZATION'] =
+      ActionController::HttpAuthentication::Basic.encode_credentials(
+        Setting.value('name'), Setting.value('password'))
+
+    @url = Shortener::ShortenedUrl.generate('example.com')
   end
 
   test "should get index" do
@@ -17,8 +22,8 @@ class UrlsControllerTest < ActionController::TestCase
   end
 
   test "should create url" do
-    assert_difference('Url.count') do
-      post :create, url: {  }
+    assert_difference('Shortener::ShortenedUrl.count') do
+      post :create, url: 'example.com/2'
     end
 
     assert_redirected_to url_path(assigns(:url))
@@ -40,7 +45,7 @@ class UrlsControllerTest < ActionController::TestCase
   end
 
   test "should destroy url" do
-    assert_difference('Url.count', -1) do
+    assert_difference('Shortener::ShortenedUrl.count', -1) do
       delete :destroy, id: @url
     end
 

@@ -21,5 +21,7 @@ module HkkSn
     # config.i18n.default_locale = :de
 
     config.assets.paths << "#{Rails}/vendor/assets/fonts"
+
+    config.autoload_paths += Dir["#{config.root}/lib/**/"]
   end
 end

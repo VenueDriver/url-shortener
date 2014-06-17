@@ -1,6 +1,13 @@
-.span-12.hero-unit
-  %h1
-    %a{href: "/#{@url.unique_key}"}
-      = hostname
-      \/#{@url.unique_key}
-  %p Your short URL.
+.span-12.jumbotron
+  .well.well-lg
+    %a.short_url{href: "/#{@url.unique_key}"}
+      = domain_name + '/' + @url.unique_key
+  %p
+    Full URL:
+    %a{href: full_url(@url)}
+      = full_url(@url).truncate(50)
+
+  %btn-toolbar.pull-right
+    %a.btn.btn-default.btn-larget{href: edit_shortener_shortened_url_path(@url)} Edit URL
+    %a.btn.btn-primary.btn-larget{href: root_path} Done
+  .clearfix

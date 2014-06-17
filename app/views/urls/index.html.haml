@@ -1,3 +1,35 @@
 .jumbotron
-  %h1 Hkk.sn
-  %p Custom branded Hakkasan short URLs
+  %h1 #{domain_name}
+  %p
+    Custom branded short URLs
+    %span.pull-right
+      %a.btn.btn-primary.btn-large{href: new_shortener_shortened_url_path} Create new short URL
+
+.panel.panel-default
+  .panel-heading
+    Recent shortened URLs:
+
+  .panel-body
+    %table.table.table-condensed.table_responsive
+      %thead
+        %tr
+          %th
+            short URL
+          %th
+            original URL
+          %th
+      %tbody
+      - @urls.each do |url|
+        %tr
+          %td
+            %a{href: "/#{url.unique_key}", target: url.unique_key}
+              = condensed_url url
+          %td
+            %a{href: full_url(url), target: url.unique_key}
+              = full_url(url).truncate(80)
+          %td
+            %a.btn.btn-primary.btn-xs{href: edit_shortener_shortened_url_path(url)}
+              edit
+
+  .panel-footer
+    = paginate @urls

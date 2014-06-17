@@ -40,6 +40,7 @@ gem 'spring',        group: :development
 
 # For working with production environments.
 group :development do
+  gem 'byebug'
   gem 'engineyard'
 end
 
@@ -48,3 +49,14 @@ gem "therubyracer"
 
 # URL shortner.
 gem 'shortener', '~> 0.3.0'
+
+# Pagination.
+gem 'kaminari', '~> 0.16.1'
+
+group :test do
+  gem 'fakeweb', '~> 1.3.0'
+end
+
+group :development, :test do
+  gem 'byebug'
+end
