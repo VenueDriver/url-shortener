@@ -22,7 +22,8 @@ module ApplicationHelper
         reject{|utm_param| short_url.read_attribute(utm_param).blank?}.
         map{|utm_param| [utm_param, CGI.escape(short_url.read_attribute(utm_param))].join '='}.
         join('&')
-    uri.query = utm_parameters unless utm_parameters.blank?
+    query = [uri.query, utm_parameters].reject{|string| string.blank?}.join('&')
+    uri.query = query unless query.blank?
     uri.to_s
   end
 
