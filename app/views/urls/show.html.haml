@@ -1,7 +1,14 @@
 .span-12.jumbotron
   .well.well-lg
     %a.short_url{href: "/#{@url.unique_key}", target:@url.unique_key}
-      = domain_name + '/' + @url.unique_key
+      = condensed_url @url
+    %br
+    #short_url.hidden
+      = valid_condensed_url(@url)
+    %br
+    %button#clip_button.btn.btn-xs.btn-info.pull-right{"data-clipboard-target" => "short_url", "data-clipboard-text" => "Default clipboard text from attribute", :title => "Click me to copy to clipboard."}
+      %b Copy To Clipboard...
+    .clearfix
   %p
     Full URL:
     %a{href: full_url(@url), target:@url.unique_key}
@@ -11,3 +18,8 @@
     %a.btn.btn-default.btn-larget{href: edit_shortener_shortened_url_path(@url)} Edit URL
     %a.btn.btn-primary.btn-larget{href: root_path} Done
   .clearfix
+
+:javascript
+  $(document).ready(function() {
+    var clip = new ZeroClipboard($("#clip_button"))
+  });

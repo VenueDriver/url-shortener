@@ -28,6 +28,8 @@
             %a{href: full_url(url), target: url.unique_key}
               = full_url(url).truncate(55)
           %td
+            %a.btn.btn-primary.btn-xs{href: shortener_shortened_url_path(url)}
+              show
             %a.btn.btn-primary.btn-xs{href: edit_shortener_shortened_url_path(url)}
               edit
 
