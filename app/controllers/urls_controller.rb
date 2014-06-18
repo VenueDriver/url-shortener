@@ -1,7 +1,8 @@
 require 'url_validator'
 
 class UrlsController < ApplicationController
-  http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password')
+  http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
+    except: :expand
   skip_before_action :verify_authenticity_token
   before_action :set_url, only: [:show, :edit, :update]
   include ApplicationHelper
