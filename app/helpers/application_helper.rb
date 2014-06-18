@@ -20,7 +20,7 @@ module ApplicationHelper
     utm_parameters =
       [:utm_source, :utm_medium, :utm_term, :utm_content, :utm_name].
         reject{|utm_param| short_url.read_attribute(utm_param).blank?}.
-        map{|utm_param| [utm_param, short_url.read_attribute(utm_param)].join '='}.
+        map{|utm_param| [utm_param, CGI.escape(short_url.read_attribute(utm_param))].join '='}.
         join('&')
     uri.query = utm_parameters unless utm_parameters.blank?
     uri.to_s
