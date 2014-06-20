@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20140617175207) do
+ActiveRecord::Schema.define(version: 20140620165350) do
 
   create_table "settings", force: true do |t|
     t.string   "key"
@@ -20,7 +20,23 @@ ActiveRecord::Schema.define(version: 20140617175207) do
     t.datetime "updated_at"
   end
 
-# Could not dump table "shortened_urls" because of following NoMethodError
-#   undefined method `[]' for nil:NilClass
+  create_table "shortened_urls", force: true do |t|
+    t.integer  "owner_id"
+    t.string   "owner_type",  limit: 20
+    t.string   "url",                                 null: false
+    t.string   "unique_key",  limit: 512,             null: false
+    t.integer  "use_count",               default: 0, null: false
+    t.datetime "created_at"
+    t.datetime "updated_at"
+    t.string   "utm_source"
+    t.string   "utm_medium"
+    t.string   "utm_term"
+    t.string   "utm_content"
+    t.string   "utm_name"
+  end
+
+  add_index "shortened_urls", ["owner_id", "owner_type"], name: "index_shortened_urls_on_owner_id_and_owner_type"
+  add_index "shortened_urls", ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true
+  add_index "shortened_urls", ["url"], name: "index_shortened_urls_on_url"
 
 end
