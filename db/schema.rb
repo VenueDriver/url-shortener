@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20140620165350) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "settings", force: true do |t|
     t.string   "key"
     t.string   "value"
@@ -35,8 +38,8 @@ ActiveRecord::Schema.define(version: 20140620165350) do
     t.string   "utm_name"
   end
 
-  add_index "shortened_urls", ["owner_id", "owner_type"], name: "index_shortened_urls_on_owner_id_and_owner_type"
-  add_index "shortened_urls", ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true
-  add_index "shortened_urls", ["url"], name: "index_shortened_urls_on_url"
+  add_index "shortened_urls", ["owner_id", "owner_type"], name: "index_shortened_urls_on_owner_id_and_owner_type", using: :btree
+  add_index "shortened_urls", ["unique_key"], name: "index_shortened_urls_on_unique_key", unique: true, using: :btree
+  add_index "shortened_urls", ["url"], name: "index_shortened_urls_on_url", using: :btree
 
 end
