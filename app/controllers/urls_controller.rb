@@ -7,7 +7,7 @@ class UrlsController < ApplicationController
   before_action :set_url, only: [:show, :edit, :update]
   
   include ApplicationHelper
-  include ApiShortenUrlHelper
+  include NewUrlHelper
 
   def index
     @urls = Shortener::ShortenedUrl.order(created_at: :desc).page(params[:page])

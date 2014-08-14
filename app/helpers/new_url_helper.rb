@@ -1,4 +1,4 @@
-module ApiShortenUrlHelper
+module NewUrlHelper
 
   def create_shortenURL(params_url,params_unique)
   

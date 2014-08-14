@@ -1,5 +1,5 @@
-class ApiShortenUrlController < ApplicationController
-  include ApiShortenUrlHelper  
+class NewUrlController < ApplicationController
+  include NewUrlHelper  
   
   def create
 
