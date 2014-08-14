@@ -2,84 +2,78 @@ require 'test_helper'
 
 class APIUrlTest < ActionDispatch::IntegrationTest
 
-  # def create_url_api
-  #   json = { url: "http://api.jquery.com/category/effects/fading/", unique_key: "5131238488789745" }.to_json
-  #   post 'api_shorten_url/create.json', json
-  #   assert_equal true, true
-  # end
-
-  test "Create a new url short valid data " do 
+  test "Create a new url with valid data" do 
 
     params = {url: 'www.google.com',unique_key: '123456'}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response :success
     assert_equal 1, Shortener::ShortenedUrl.count
     assert_equal 'http://www.google.com/', Shortener::ShortenedUrl.first.url
   end
 
-  test "Create a new url short empty values" do 
+  test "Create a new url with no parameters" do 
 
-    post 'api_shorten_url/create.json'
+    post 'new_url/create.json'
       
     assert_response 422
     assert_equal 0, Shortener::ShortenedUrl.count
   end
 
-  test "Create a new url short blank values" do 
+  test "Create a new url empty parameters" do 
 
     params = {url: '',unique_key: ''}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response 422
     assert_equal 0, Shortener::ShortenedUrl.count
   end
 
-  test " Create a new url short param unique_key blank " do 
+  test " Create a new url without unique_key " do 
 
     params = {url: 'www.google.com'}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response 422
     assert_equal 0, Shortener::ShortenedUrl.count
   end
 
-  test " Create a new url short param url blank" do 
+  test " Create a new url without url" do 
 
     params = {unique_key: 'asdffc1234dsasdjk'}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response 422
     assert_equal 0, Shortener::ShortenedUrl.count
   end
 
-  test "create a new short url and create an new url whit the same values " do 
+  test "create a 2 urls with the same unique_key" do 
 
     params = {url: 'www.google.com',unique_key: '123456'}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response :success
     assert_equal 1, Shortener::ShortenedUrl.count
     assert_equal 'http://www.google.com/', Shortener::ShortenedUrl.first.url
 
     params = {url: 'www.google.com',unique_key: '123456'}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response 422
     assert_equal 1, Shortener::ShortenedUrl.count
   end
 
-  test "create a new short url if no stored in the database" do 
+  test "create a 2 urls in a row" do 
 
     params = {url: 'www.google.com',unique_key: '123456'}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response :success
     assert_equal 1, Shortener::ShortenedUrl.count
     assert_equal 'http://www.google.com/', Shortener::ShortenedUrl.first.url
 
     params = {url: 'https://www.youtube.com/',unique_key: '7431258'}
-    post 'api_shorten_url/create.json' , params
+    post 'new_url/create.json' , params
       
     assert_response :success
     assert_equal 2, Shortener::ShortenedUrl.count
