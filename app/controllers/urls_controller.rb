@@ -1,11 +1,13 @@
 require 'url_validator'
 
 class UrlsController < ApplicationController
-  http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
-    except: :expand
+  #http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
+  #  except: :expand
   skip_before_action :verify_authenticity_token
   before_action :set_url, only: [:show, :edit, :update]
+  
   include ApplicationHelper
+  include ApiShortenUrlHelper
 
   def index
     @urls = Shortener::ShortenedUrl.order(created_at: :desc).page(params[:page])
@@ -19,32 +21,11 @@ class UrlsController < ApplicationController
   end
 
   def create
-    url = URLValidator.new(url: params['url'])
 
-    # This logic all really belongs in the Shortener::ShortenedUrl model.  This
-    # ugliness seems to be a sign that we should fork that gem and extend it.
-    if url.works?
-      unless params['unique_key'].blank?
-        if params['unique_key'] =~ /\A[a-zA-Z0-9\-]+\Z/
-          unless Shortener::ShortenedUrl.where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
-            @url = Shortener::ShortenedUrl.generate(url.to_s)
-            @url.unique_key = params['unique_key']
-            @url.save
-          else
-            @url = Shortener::ShortenedUrl.new url: params['url']
-            @url.errors[:base] << 'That short code already exists.'
-          end
-        else
-          @url = Shortener::ShortenedUrl.new url: params['url']
-          @url.errors[:base] << 'Short codes can only include numbers, letters, and "-".'
-        end
-      else
-        @url = Shortener::ShortenedUrl.generate(url.to_s)
-      end
-    else
-      @url = Shortener::ShortenedUrl.new url: params['url']
-      @url.errors[:base] << 'That URL doesn\'t seem to work.'
-    end
+    urls = create_shortenURL(params['url'], params['unique_key'])
+    
+    @url = urls[:short_url]
+    url = urls[:url]
 
     respond_to do |format|
       if url.works? and @url.errors.messages.empty?
