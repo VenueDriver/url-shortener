@@ -2,34 +2,34 @@ class ApiShortenUrlController < ApplicationController
   include ApiShortenUrlHelper  
   
   def create
-    puts "@@@@@@@@@@@@@@@@@@@@@@@@@@@"
-    puts params.inspect
 
-    if !(params['url'] && params['unique_key'])
-      render json: {status: false} and return
+    @url = Shortener::ShortenedUrl.generate('')
+    url  = ""
+
+    if valid_data
+      urls = create_shortenURL(params['url'], params['unique_key'])
+      @url = urls[:short_url]
+      url  = urls[:url]
     end
 
-    puts params['url']
-    puts params['unique_key']
-    urls = create_shortenURL(params['url'], params['unique_key'])
-    
-    @url = urls[:short_url]
-    url = urls[:url]
-
     respond_to do |format|
-      if url.works? and @url.errors.messages.empty?
-        format.json { render json:"created" , location: @url }
-      else  
+      if @url.errors.messages.empty? and url.works?
+        format.json { render json: "created" , location: @url }
+      else
         format.json { render json: @url.errors, status: :unprocessable_entity }
       end
     end
   end
+     
+  def valid_data
+    unless (params.key?(:unique_key) || params.key?(:url))      
+      return false
+    end
 
-  # private
+    if (params['unique_key'].blank? || params['url'].blank?)      
+      return false
+    end
+    return true
+  end
 
-  # def restrict_params
-  #   unless params['url'].blank? || params['unique_key'].blank?
-  #     params.require(:setting).permit(:params['url'], :params['unique_key'])
-  #   end
-  # end   
 end

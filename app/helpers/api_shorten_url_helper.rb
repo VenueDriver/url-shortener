@@ -32,5 +32,4 @@ module ApiShortenUrlHelper
     return { url: url, short_url: short_url }
   end    
 
-end
- 
+end 

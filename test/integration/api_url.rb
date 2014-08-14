@@ -8,13 +8,80 @@ class APIUrlTest < ActionDispatch::IntegrationTest
   #   assert_equal true, true
   # end
 
-  test " Create a new url short  " do 
+  test "Create a new url short valid data " do 
 
-    params = {url: "google.com" , unique_key: "adsasdjk"}
-    post "api_shorten_url/create.json" , params
-    
+    params = {url: 'www.google.com',unique_key: '123456'}
+    post 'api_shorten_url/create.json' , params
+      
     assert_response :success
-
+    assert_equal 1, Shortener::ShortenedUrl.count
+    assert_equal 'http://www.google.com/', Shortener::ShortenedUrl.first.url
   end
 
+  test "Create a new url short empty values" do 
+
+    post 'api_shorten_url/create.json'
+      
+    assert_response 422
+    assert_equal 0, Shortener::ShortenedUrl.count
+  end
+
+  test "Create a new url short blank values" do 
+
+    params = {url: '',unique_key: ''}
+    post 'api_shorten_url/create.json' , params
+      
+    assert_response 422
+    assert_equal 0, Shortener::ShortenedUrl.count
+  end
+
+  test " Create a new url short param unique_key blank " do 
+
+    params = {url: 'www.google.com'}
+    post 'api_shorten_url/create.json' , params
+      
+    assert_response 422
+    assert_equal 0, Shortener::ShortenedUrl.count
+  end
+
+  test " Create a new url short param url blank" do 
+
+    params = {unique_key: 'asdffc1234dsasdjk'}
+    post 'api_shorten_url/create.json' , params
+      
+    assert_response 422
+    assert_equal 0, Shortener::ShortenedUrl.count
+  end
+
+  test "create a new short url if no stored in the database" do 
+
+    params = {url: 'www.google.com',unique_key: '123456'}
+    post 'api_shorten_url/create.json' , params
+      
+    assert_response :success
+    assert_equal 1, Shortener::ShortenedUrl.count
+    assert_equal 'http://www.google.com/', Shortener::ShortenedUrl.first.url
+
+    params = {url: 'www.google.com',unique_key: '123456'}
+    post 'api_shorten_url/create.json' , params
+      
+    assert_response 422
+    assert_equal 1, Shortener::ShortenedUrl.count
+  end
+
+  test " Create a new url short case_6_9" do 
+
+    params = {url: 'www.google.com',unique_key: '123456'}
+    post 'api_shorten_url/create.json' , params
+      
+    assert_response :success
+    assert_equal 1, Shortener::ShortenedUrl.count
+    assert_equal 'http://www.google.com/', Shortener::ShortenedUrl.first.url
+
+    params = {url: 'https://www.youtube.com/',unique_key: '7431258'}
+    post 'api_shorten_url/create.json' , params
+      
+    assert_response :success
+    assert_equal 2, Shortener::ShortenedUrl.count
+  end
 end
