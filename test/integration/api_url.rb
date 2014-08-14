@@ -53,7 +53,7 @@ class APIUrlTest < ActionDispatch::IntegrationTest
     assert_equal 0, Shortener::ShortenedUrl.count
   end
 
-  test "create a new short url if no stored in the database" do 
+  test "create a new short url and create an new url whit the same values " do 
 
     params = {url: 'www.google.com',unique_key: '123456'}
     post 'api_shorten_url/create.json' , params
@@ -69,7 +69,7 @@ class APIUrlTest < ActionDispatch::IntegrationTest
     assert_equal 1, Shortener::ShortenedUrl.count
   end
 
-  test " Create a new url short case_6_9" do 
+  test "create a new short url if no stored in the database" do 
 
     params = {url: 'www.google.com',unique_key: '123456'}
     post 'api_shorten_url/create.json' , params
