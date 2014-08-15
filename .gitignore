@@ -17,5 +17,6 @@
 
 .vagrant
 *.DS_Store
+cookbooks/.DS_Store
 
 /public/assets
