@@ -34,8 +34,9 @@ class APIUrlTest < ActionDispatch::IntegrationTest
     params = {url: 'www.google.com'}
     post 'new_url/create.json' , params
       
-    assert_response 422
-    assert_equal 0, Shortener::ShortenedUrl.count
+    assert_response :success
+    assert_equal 1, Shortener::ShortenedUrl.count
+    assert_equal 'http://www.google.com/', Shortener::ShortenedUrl.first.url
   end
 
   test " Create a new url without url" do 
@@ -78,4 +79,5 @@ class APIUrlTest < ActionDispatch::IntegrationTest
     assert_response :success
     assert_equal 2, Shortener::ShortenedUrl.count
   end
+  #########################################################
 end

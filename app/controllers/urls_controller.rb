@@ -21,7 +21,7 @@ class UrlsController < ApplicationController
   end
 
   def create
-
+    
     urls = create_shortenURL(params['url'], params['unique_key'])
     
     @url = urls[:short_url]
