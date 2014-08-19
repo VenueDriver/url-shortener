@@ -10,8 +10,10 @@ class NewUrlController < ApplicationController
     if valid_data
       
       if params['unique_key'].nil? || params['unique_key'].blank?
-        o = [('a'..'z'), ('A'..'Z'), (0..9)].map { |i| i.to_a }.flatten
-        params['unique_key'] = (0...5).map { o[rand(o.length)] }.join
+          begin        
+            o = [('a'..'z'), ('A'..'Z'), (0..9)].map { |i| i.to_a }.flatten
+            params['unique_key'] = (0...5).map { o[rand(o.length)] }.join
+          end while Shortener::ShortenedUrl.where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
       end
     
       urls = create_shortenURL(params['url'], params['unique_key'])
