@@ -1,6 +1,7 @@
 class NewUrlController < ApplicationController
   skip_before_filter  :verify_authenticity_token
-  include NewUrlHelper  
+  include NewUrlHelper
+  include ApplicationHelper
   
   def create
     
@@ -24,7 +25,8 @@ class NewUrlController < ApplicationController
     
     respond_to do |format|
       if @url.errors.messages.empty? and url.works?
-        format.json { render json: { status: "created", location: @url }, status: 200 }
+        short_url = condensed_url @url
+        format.json { render json: { status: "created", location: @url, affiliate_code_staff: params["affiliate_code_staff"] , event_id: params["event_id"], short_url: short_url }, status: 200 }
       else
         format.json { render json: { status: "error", message: @url.errors }, status: :unprocessable_entity }
       end
