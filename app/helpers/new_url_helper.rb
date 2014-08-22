@@ -1,5 +1,5 @@
 module NewUrlHelper
-
+ 
   def create_shortenURL(params_url,params_unique)
   
   	url = URLValidator.new(url: params_url)

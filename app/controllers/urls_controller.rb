@@ -1,8 +1,8 @@
 require 'url_validator'
 
 class UrlsController < ApplicationController
-  #http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
-  #  except: :expand
+  http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
+  except: :expand
   skip_before_action :verify_authenticity_token
   before_action :set_url, only: [:show, :edit, :update]
   
@@ -21,7 +21,7 @@ class UrlsController < ApplicationController
   end
 
   def create
-
+    
     urls = create_shortenURL(params['url'], params['unique_key'])
     
     @url = urls[:short_url]
