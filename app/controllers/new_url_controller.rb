@@ -35,7 +35,7 @@ class NewUrlController < ApplicationController
 
   def api_update
     respond_to do |format|
-      format.json { render json: { status: "success", message: "conecttion ok" }, status: 200}
+      format.json { render json: { status: "success", message: Time.now.strftime("%Y/%m/%d %H:%M:%S") }, status: 200}
     end
   end
 
