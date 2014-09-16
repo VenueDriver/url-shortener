@@ -32,7 +32,13 @@ class NewUrlController < ApplicationController
       end
     end
   end
-     
+
+  def api_update
+    respond_to do |format|
+      format.json { render json: { status: "success", message: "conecttion ok" }, status: 200}
+    end
+  end
+
   def valid_data
     
     if params.key?(:url).nil? || params['url'].blank?
