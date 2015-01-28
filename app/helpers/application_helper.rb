@@ -1,10 +1,7 @@
 module ApplicationHelper
 
   def domain_name
-    domain_name = Setting.value('domain_name')
-    return domain_name unless domain_name.nil?
-    request.server_name +
-      (request.server_port.nil? ? '' : ":#{request.server_port}")
+    request.server_name
   end
 
   def active_if(action: nil)
