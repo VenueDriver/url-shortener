@@ -33,14 +33,16 @@ class UrlsController < ApplicationController
     if url.works?
       unless params['unique_key'].blank?
         if params['unique_key'] =~ /\A[a-zA-Z0-9\-]+\Z/
-          unless Shortener::ShortenedUrl.where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
+          if Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
+            where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
+
+            @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
+            @url.errors[:base] << 'That short code already exists.'
+          else
             @url = Shortener::ShortenedUrl.generate(url.to_s)
             @url.unique_key = params['unique_key']
             @url.domain_name = request.server_name.downcase
             @url.save
-          else
-            @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
-            @url.errors[:base] << 'That short code already exists.'
           end
         else
           @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
@@ -111,7 +113,7 @@ class UrlsController < ApplicationController
   private
 
   def set_url
-    @url = Shortener::ShortenedUrl.find(params[:id]).where(domain_name: request.server_name.downcase)
+    @url = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
