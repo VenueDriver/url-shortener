@@ -2,10 +2,12 @@ require 'url_validator'
 
 class UrlsController < ApplicationController
   http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
-    except: :expand
+  except: :expand
   skip_before_action :verify_authenticity_token
   before_action :set_url, only: [:show, :edit, :update]
+  
   include ApplicationHelper
+  include NewUrlHelper
 
   def index
     @urls = Shortener::ShortenedUrl.where(domain_name: request.server_name).
@@ -20,7 +22,11 @@ class UrlsController < ApplicationController
   end
 
   def create
-    url = URLValidator.new(url: params['url'])
+    
+    urls = create_shortenURL(params['url'], params['unique_key'])
+    
+    @url = urls[:short_url]
+    url = urls[:url]
 
     # This logic all really belongs in the Shortener::ShortenedUrl model.  This
     # ugliness seems to be a sign that we should fork that gem and extend it.

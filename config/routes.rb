@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   get '/:id' => "urls#expand"
+  get 'api/update.:format' => 'new_url#api_update'
+  post 'new_url/create.:format' => 'new_url#create'
 
   # You can have the root of your site routed with "root"
   root 'urls#index'
