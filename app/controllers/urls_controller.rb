@@ -10,12 +10,12 @@ class UrlsController < ApplicationController
   include NewUrlHelper
 
   def index
-    @urls = Shortener::ShortenedUrl.where(domain_name: request.server_name).
+    @urls = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
               order(created_at: :desc).page(params[:page])
   end
 
   def new
-    @url = Shortener::ShortenedUrl.new(domain_name: request.server_name)
+    @url = Shortener::ShortenedUrl.new(domain_name: request.server_name.downcase)
   end
 
   def edit
@@ -36,22 +36,22 @@ class UrlsController < ApplicationController
           unless Shortener::ShortenedUrl.where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
             @url = Shortener::ShortenedUrl.generate(url.to_s)
             @url.unique_key = params['unique_key']
-            @url.domain_name = request.server_name
+            @url.domain_name = request.server_name.downcase
             @url.save
           else
-            @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name
+            @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
             @url.errors[:base] << 'That short code already exists.'
           end
         else
-          @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name
+          @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
           @url.errors[:base] << 'Short codes can only include numbers, letters, and "-".'
         end
       else
         @url = Shortener::ShortenedUrl.generate(url.to_s)
-        @url.domain_name = request.server_name
+        @url.domain_name = request.server_name.downcase
       end
     else
-      @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name
+      @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
       @url.errors[:base] << 'That URL doesn\'t seem to work.'
     end
 
@@ -87,7 +87,7 @@ class UrlsController < ApplicationController
     token = /^([#{Shortener.key_chars.join}]*).*/i.match(params[:id])[1]
 
     # pull the link out of the db
-    url = Shortener::ShortenedUrl.where(domain_name: request.server_name).
+    url = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
             where("lower(unique_key) = ?", token.downcase).first
 
     if url
@@ -111,7 +111,7 @@ class UrlsController < ApplicationController
   private
 
   def set_url
-    @url = Shortener::ShortenedUrl.find(params[:id]).where(domain_name: request.server_name)
+    @url = Shortener::ShortenedUrl.find(params[:id]).where(domain_name: request.server_name.downcase)
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
