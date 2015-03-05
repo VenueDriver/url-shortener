@@ -32,7 +32,7 @@ class UrlsController < ApplicationController
     # ugliness seems to be a sign that we should fork that gem and extend it.
     if url.works?
       unless params['unique_key'].blank?
-        if params['unique_key'] =~ /\A[a-zA-Z0-9\-]+\Z/
+        if params['unique_key'] =~ /\A[a-zA-Z0-9]+\Z/
           if Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
             where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
 
@@ -46,7 +46,7 @@ class UrlsController < ApplicationController
           end
         else
           @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
-          @url.errors[:base] << 'Short codes can only include numbers, letters, and "-".'
+          @url.errors[:base] << 'Short codes can only include numbers and letters.'
         end
       else
         @url = Shortener::ShortenedUrl.generate(url.to_s)
@@ -85,6 +85,7 @@ class UrlsController < ApplicationController
 
   # find the real link for the shortened link key and redirect
   def expand
+    debugger
     # only use the leading valid characters
     token = /^([#{Shortener.key_chars.join}]*).*/i.match(params[:id])[1]
 
