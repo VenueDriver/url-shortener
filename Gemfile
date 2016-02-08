@@ -27,16 +27,13 @@ gem 'jbuilder', '~> 2.0'
 # bundle exec rake doc:rails generates the API under doc/api.
 gem 'sdoc', '~> 0.4.0',          group: :doc
 
-# Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-gem 'spring',        group: :development
-
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
 # For working with production environments.
 group :development do
-  gem 'byebug'
   gem 'engineyard'
+  gem 'spring'
 end
 
 # For execjs.
@@ -50,11 +47,17 @@ gem 'kaminari', '~> 0.16.1'
 
 # ZeroClipboard integration, for copying new URLs to the user's clipboard.
 gem 'zeroclipboard-rails', '~> 0.0.13'
+gem 'mechanize'
 
 group :test do
   gem 'fakeweb', '~> 1.3.0'
+  gem 'cucumber-rails', :require => false
+  gem 'database_cleaner'
+  gem 'webrat'
+  gem 'factory_girl_rails'
 end
 
 group :development, :test do
   gem 'byebug'
+  gem 'rspec-rails', '~> 3.0'
 end

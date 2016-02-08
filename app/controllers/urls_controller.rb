@@ -2,7 +2,7 @@ require 'url_validator'
 
 class UrlsController < ApplicationController
   http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
-  except: :expand
+                                except: :expand
   skip_before_action :verify_authenticity_token
   before_action :set_url, only: [:show, :edit, :update]
   
@@ -85,7 +85,6 @@ class UrlsController < ApplicationController
 
   # find the real link for the shortened link key and redirect
   def expand
-    debugger
     # only use the leading valid characters
     token = /^([#{Shortener.key_chars.join}]*).*/i.match(params[:id])[1]
 
