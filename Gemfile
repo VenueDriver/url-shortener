@@ -54,6 +54,8 @@ group :test do
   gem 'database_cleaner'
   gem 'webrat'
   gem 'factory_girl_rails'
+  gem 'vcr'
+  gem 'webmock'
 end
 
 group :development, :test do
