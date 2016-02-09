@@ -47,7 +47,6 @@ gem 'kaminari', '~> 0.16.1'
 
 # ZeroClipboard integration, for copying new URLs to the user's clipboard.
 gem 'zeroclipboard-rails', '~> 0.0.13'
-gem 'mechanize'
 
 group :test do
   gem 'fakeweb', '~> 1.3.0'

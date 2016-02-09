@@ -1,4 +1,4 @@
-Given /^our host is "([^\"]+)"$/ do |host|
+Given /^Our host is "([^\"]+)"$/ do |host|
   host! host
 end
 
