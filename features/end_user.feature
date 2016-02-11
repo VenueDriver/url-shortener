@@ -1,7 +1,7 @@
 Feature: End User Feature
   As an End User I should be able to use shortend urls to access full urls
 
-  @end_user
+  @external_url @end_user
   Scenario: End User uses shortend url and is redirected to full url
     Given Our host is "hkk.sn"
       And that I am an end user

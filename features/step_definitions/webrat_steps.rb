@@ -16,6 +16,10 @@ Then /^I should see "([^\"]*)"$/ do |text|
   expect(response.body).to include(text)
 end
 
+Then /^I should not see "([^\"]*)"$/ do |text|
+  expect(response.body).not_to include(text)
+end
+
 Then /^I click "([^\"]*)"$/ do |button_text|
   click_link button_text
 end

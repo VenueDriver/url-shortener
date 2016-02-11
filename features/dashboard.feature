@@ -1,6 +1,6 @@
 Feature: Dashboard Management
-  As An admin I should be able to create short URLs with domain name
-  and see list of previously generated short URLs
+  As An admin I should be able to manage the unified admin dashboard 
+  to manage urls of multiple domain names
 
   @admin
   Scenario: Admin fails to login into the dashboard
@@ -10,17 +10,25 @@ Feature: Dashboard Management
      Then I should see "HTTP Basic: Access denied"
 
   @admin
-  Scenario: Admin logs into the dashboard and creates a short URL
+  Scenario: Admin successfully logs in and can see Dashboard
     Given Our host is "hkk.sn"
       And I am an authorized user with credentials as name and password
      When I go to homepage and provide name and password
      Then I should see "Custom branded short URLs"
       And I should see "Create new short URL"
-     When I click "Create new short URL"
-     Then I should see "New hkk.sn URL"
-     When I enter "http://external.com" into the input box as the URL in new url form
-      And I enter "blah" into the input box as the short code in new url form
-      And I submit the new url form
-     Then I should have 1 Shorted URL with domain name as "hkk.sn"
-     When I go to homepage
-     Then I should see "hkk.sn/blah"
+     
+  @admin
+  Scenario: Short URL search
+    Given Our host is "hkk.sn"
+      And I am an authorized user with credentials as name and password
+      And there is a shortened URL http://hkk.sn/blah1 that goes to http://example1.com/
+      And there is a shortened URL http://hkk.sn/blah2 that goes to http://example2.com/
+     When I go to homepage and provide name and password
+     Then I should see "hkk.sn/blah1"
+      And I should see "hkk.sn/blah2"
+      And I should see "Enter Short URL"
+      And I should see "Search"
+     When I enter "blah1" in search field of short url
+      And I press Search button of short url search form
+     Then I should see "hkk.sn/blah1"
+      And I should not see "hkk.sn/blah2"

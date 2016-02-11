@@ -10,8 +10,11 @@ class UrlsController < ApplicationController
   include NewUrlHelper
 
   def index
-    @urls = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
-              order(created_at: :desc).page(params[:page])
+    @urls = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase)
+    if params[:query].present?
+      @urls = @urls.where("unique_key iLIKE ?", "%#{params[:query]}%")
+    end
+    @urls = @urls.order(created_at: :desc).page(params[:page])
   end
 
   def new
