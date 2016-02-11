@@ -10,15 +10,21 @@ Feature: Dashboard Management
      Then I should see "HTTP Basic: Access denied"
 
   @admin
-  Scenario: Admin successfully logs in and can see Dashboard
-    Given Our host is "hkk.sn"
+  Scenario: Admin successfully logs in and can see Dashboard and all domains
+    Given Our host is "random.com"
+      And there is a shortened URL http://hkk.sn/blah1 that goes to http://example1.com/
+      And there is a shortened URL http://omnia.ws/blah2 that goes to http://example2.com/
       And I am an authorized user with credentials as name and password
      When I go to homepage and provide name and password
      Then I should see "Custom branded short URLs"
       And I should see "Create new short URL"
+      And I should see "Domains"
+      And I should see "hkk.sn"
+      And I should see "omnia.ws"
+      And I should see "random.com"
      
   @admin
-  Scenario: Short URL search
+  Scenario: Admin searches for shortend URL
     Given Our host is "hkk.sn"
       And I am an authorized user with credentials as name and password
       And there is a shortened URL http://hkk.sn/blah1 that goes to http://example1.com/
