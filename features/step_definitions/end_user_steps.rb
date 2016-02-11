@@ -9,7 +9,7 @@ Given(/^there is a shortened URL (http|https):\/\/(.*)\/(.*) that goes to (.*)$/
 end
 
 When(/^I access (.*)$/) do |url|
-  VCR.use_cassette("cassette_name") { visit(url) }
+  visit(url)
 end
 
 Then(/^I should be redirected to (.*)$/) do |url|
