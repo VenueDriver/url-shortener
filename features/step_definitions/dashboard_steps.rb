@@ -5,3 +5,7 @@ end
 When(/^I press Search button of short url search form$/) do
   click_button "Search"
 end
+
+When(/^I select (.*) in domains dropdown$/) do |domain_name|
+  click_link domain_name
+end

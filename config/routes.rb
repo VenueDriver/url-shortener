@@ -5,7 +5,13 @@ Rails.application.routes.draw do
     controller: 'urls',
     path: 'urls' do
     member do
-      get 'expand'
+      get :expand
+    end
+  end
+
+  resources :domains, only: [:index] do
+    collection do
+      post :switch
     end
   end
 

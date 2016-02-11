@@ -11,9 +11,10 @@ class UrlsController < ApplicationController
   include NewUrlHelper
 
   def index
-    @urls = Shortener::ShortenedUrl.where(domain_name: @current_domain)
-    if params[:query].present?
-      @urls = @urls.where("unique_key iLIKE ?", "%#{params[:query]}%")
+    @urls = if params[:query].present?
+      Shortener::ShortenedUrl.where("unique_key iLIKE ?", "%#{params[:query]}%")
+    else
+      Shortener::ShortenedUrl.all
     end
     @urls = @urls.order(created_at: :desc).page(params[:page])
   end
@@ -26,7 +27,6 @@ class UrlsController < ApplicationController
   end
 
   def create
-    
     urls = create_shortenURL(params['url'], params['unique_key'])
     
     @url = urls[:short_url]
@@ -130,7 +130,7 @@ class UrlsController < ApplicationController
   end
 
   def load_domains
-    @current_domain = request.server_name.downcase
+    @current_domain = session[:domain_name]
     @domains = Shortener::ShortenedUrl.select(:domain_name).distinct(:domain_name).map(&:domain_name)
     @domains << @current_domain unless @domains.include?(@current_domain)
   end
