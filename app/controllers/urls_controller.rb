@@ -29,43 +29,14 @@ class UrlsController < ApplicationController
   end
 
   def create
-    urls = create_shortenURL(params['url'], params['unique_key'])
+    urls = create_shortenURL(params[:url], params[:unique_key])
     
     @url = urls[:short_url]
     url = urls[:url]
 
-    # This logic all really belongs in the Shortener::ShortenedUrl model.  This
-    # ugliness seems to be a sign that we should fork that gem and extend it.
-    if url.works?
-      unless params['unique_key'].blank?
-        if params['unique_key'] =~ /\A[a-zA-Z0-9]+\Z/
-          if Shortener::ShortenedUrl.where(domain_name: @request_domain).
-            where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
-
-            @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: @request_domain
-            @url.errors[:base] << 'That short code already exists.'
-          else
-            @url = Shortener::ShortenedUrl.generate(url.to_s)
-            @url.unique_key = params['unique_key']
-            @url.domain_name = @request_domain
-            @url.save
-          end
-        else
-          @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: @request_domain
-          @url.errors[:base] << 'Short codes can only include numbers and letters.'
-        end
-      else
-        @url = Shortener::ShortenedUrl.generate(url.to_s)
-        @url.domain_name = @request_domain
-      end
-    else
-      @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: @request_domain
-      @url.errors[:base] << 'That URL doesn\'t seem to work.'
-    end
-
     respond_to do |format|
       if url.works? and @url.errors.messages.empty?
-        format.html { redirect_to @url }
+        format.html { redirect_to root_url }
         format.json { render :show, status: :created, location: @url }
       else
         format.html { render :new }
