@@ -17,6 +17,7 @@ When(/^I go to homepage and provide (.*) and (.*)$/) do |username, password|
 end
 
 Then /^I should see "([^\"]*)"$/ do |text|
+  follow_redirect! if response.status == 302
   expect(response.body).to include(text)
 end
 

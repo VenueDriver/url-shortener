@@ -7,5 +7,5 @@ When(/^I press Search button of short url search form$/) do
 end
 
 When(/^I select (.*) in domains dropdown$/) do |domain_name|
-  click_link domain_name
+  click_link domain_name, method: :post
 end

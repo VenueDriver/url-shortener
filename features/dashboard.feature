@@ -49,6 +49,5 @@ Feature: Dashboard Management
      Then I should see "hkk.sn/blah1"
       And I should see "omnia.ws/blah2"
      When I select hkk.sn in domains dropdown
-     Then I should see "Switch domain to hkk.sn"
       And I should see "hkk.sn/blah1"
       And I should not see "omnia.ws/blah2"

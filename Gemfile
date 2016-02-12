@@ -50,7 +50,7 @@ gem 'zeroclipboard-rails', '~> 0.0.13'
 
 group :test do
   gem 'fakeweb', '~> 1.3.0'
-  gem 'cucumber-rails', :require => false
+  gem 'cucumber-rails'
   gem 'database_cleaner'
   gem 'webrat'
   gem 'factory_girl_rails'
@@ -60,5 +60,5 @@ end
 
 group :development, :test do
   gem 'byebug'
-  gem 'rspec-rails', '~> 3.0'
+  gem 'rspec-rails', '~> 3.4.2'
 end
