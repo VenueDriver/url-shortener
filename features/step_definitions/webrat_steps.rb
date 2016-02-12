@@ -34,5 +34,5 @@ When(/^I go to homepage$/) do
 end
 
 Then /^I should see "([^\"]*)" in (.*)$/ do |text, selector_context|
-  expect(response).to have_selector(selector_context_to_id_map[selector_context], :content => text)
+  expect(response).to have_selector(selector_context_to_id_map[selector_context], content: text)
 end

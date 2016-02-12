@@ -17,3 +17,7 @@ end
 Then(/^I should have (\d+) Shorted URL with domain name as "([^"]*)"$/) do |count, domain_name|
   expect(Shortener::ShortenedUrl.where(domain_name: domain_name).count).to eq count.to_i
 end
+
+Then /^I should see "([^\"]*)" domain checkbox as checked$/ do |domain|
+  expect(response).to have_selector("input", id: "domain_name_input_#{domain}", checked: "checked")
+end

@@ -2,7 +2,7 @@
 
   .panel.panel-default
     .panel-heading
-      %h3.panel-title Edit #{domain_name} URL:
+      %h3.panel-title Edit #{@url.domain_name} URL:
 
     .panel-body
       = render partial: 'form', locals: {f: f}
@@ -12,3 +12,4 @@
         %a.btn.btn-default.btn-larget{href: root_path} Cancel
         %button.btn.btn-primary.btn-large{type: "submit"} Update URL
       .clearfix
+      
