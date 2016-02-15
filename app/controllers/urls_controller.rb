@@ -29,16 +29,45 @@ class UrlsController < ApplicationController
   end
 
   def create
-    urls = create_shortenURL(params[:url], params[:unique_key])
-    
-    @url = urls[:short_url]
-    url = urls[:url]
+    url_to_shorten = params[:url]
+    is_url_working = URLValidator.new(url: url_to_shorten).works?
+    domains = params[:domain_name]
+    unique_key = params[:unique_key]
+
+    urls_with_errors = domains.map do |domain|
+      url = Shortener::ShortenedUrl.new url_params
+      if is_url_working
+        if unique_key.present?
+          if unique_key =~ /\A[a-zA-Z0-9]+\Z/
+            if Shortener::ShortenedUrl.where(domain_name: domain).
+                where("lower(unique_key) = ?", unique_key.downcase).exists?
+              url.errors[:base] << "That short code already exists for #{domain}."
+            end
+          else
+            url.errors[:base] << 'Short codes can only include numbers and letters.'
+          end
+        end
+        url
+      else
+        url.errors[:base] << 'That URL doesn\'t seem to work.'
+      end
+    end.select do |url|
+      url.errors.present?
+    end
 
     respond_to do |format|
-      if url.works? and @url.errors.messages.empty?
+      if urls_with_errors.empty?
+        urls = domains.map do |domain|
+          url = Shortener::ShortenedUrl.create url: url_to_shorten
+          url.unique_key = unique_key if unique_key.present?
+          url.domain_name = domain
+          url.save
+          url
+        end
         format.html { redirect_to root_url }
-        format.json { render :show, status: :created, location: @url }
+        format.json { render :index, status: :created, location: urls }
       else
+        @url = urls_with_errors.first
         format.html { render :new }
         format.json { render json: @url.errors, status: :unprocessable_entity }
       end
@@ -105,7 +134,8 @@ class UrlsController < ApplicationController
   def load_domains
     @current_domain = session[:domain_name]
     @request_domain = request.server_name.downcase
-    @domains = Shortener::ShortenedUrl.select(:domain_name).distinct(:domain_name).map(&:domain_name)
+    @domains = Shortener::ShortenedUrl.select(:domain_name).where("domain_name is not null").
+                distinct(:domain_name).map(&:domain_name)
     @domains << @request_domain unless @domains.include?(@request_domain)
   end
 
