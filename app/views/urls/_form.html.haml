@@ -16,6 +16,13 @@
     .col-sm-10
       = f.text_field :unique_key, class: 'form-control', name: "unique_key", placeholder: "(optional, case insensitive) tiestopromo, nye2014, FREESTUFF", type: "text"
 
+  .form-group
+    %label.col-sm-2.control-label{for: "domain_names"} Domains
+    .col-sm-10
+      - @domains.each do |domain|
+        = check_box_tag "domain_name[]", domain, @current_domain.nil? || @current_domain == domain, id: "domain_name_input_#{domain}"
+        = label_tag :domain_name, domain, for: "domain_name_input_#{domain}"
+
   .panel.panel-default
     .panel-heading
       Google Analytics UTM parameters (optional)

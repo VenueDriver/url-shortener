@@ -25,7 +25,7 @@ module ApplicationHelper
   end
 
   def condensed_url(short_url)
-    "#{domain_name}/" + short_url.unique_key
+    "#{short_url.domain_name}/#{short_url.unique_key}"
   end
 
   def valid_condensed_url(short_url)

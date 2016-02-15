@@ -42,6 +42,19 @@
             %ul.nav.navbar-nav
               %li{ :class => active_if(action: ['new', 'create']) }
                 %a{href: "/urls/new"} Create
+            %ul.nav.navbar-nav.navbar-right
+              %li.dropdown
+                %a.dropdown-toggle{"aria-expanded" => "false", "aria-haspopup" => "true", "data-toggle" => "dropdown", :href => "#", :role => "button"}
+                  Domains - #{@current_domain || "All"}
+                  %span.caret
+                %ul#domains_dropdown.dropdown-menu
+                  %li 
+                    = link_to switch_domains_path(domain_name: nil), method: :post do
+                      All
+                  - @domains.each do |domain|
+                    %li
+                      = link_to switch_domains_path(domain_name: domain), method: :post do
+                        = domain
   
       = yield
     / /container
