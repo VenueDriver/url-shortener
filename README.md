@@ -1,4 +1,4 @@
-# Hkk-sn
+# URL Shortener
 
 This is a URL shortener for the [Hakkasan Group](http://hakkasangroup.com/).  Any URL gets shortened
 to http://Hkk.sn/whatever.  It uses [Rails](http://rubyonrails.org/) 4.1.1 and [Ruby](https://www
