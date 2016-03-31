@@ -12,9 +12,9 @@ Rails.application.routes.draw do
   # For health checks.  Without explicitly specifying these routes as a
   # higher priority, the URL http://example.com/fitter_happier will be
   # interpreted as a short URL.
-  match '/fitter_happier' => 'fitter_happier#index'
-  match '/fitter_happier/site_check' => 'fitter_happier#site_check'
-  match '/fitter_happier/site_and_database_check' => 'fitter_happier#site_and_database_check'
+  get '/fitter_happier' => 'fitter_happier#index'
+  get '/fitter_happier/site_check' => 'fitter_happier#site_check'
+  get '/fitter_happier/site_and_database_check' => 'fitter_happier#site_and_database_check'
 
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
