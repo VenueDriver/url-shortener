@@ -4,64 +4,70 @@ class UrlsController < ApplicationController
   http_basic_authenticate_with name: Setting.value('name'), password: Setting.value('password'),
                                 except: :expand
   skip_before_action :verify_authenticity_token
+  before_action :load_domains
   before_action :set_url, only: [:show, :edit, :update]
   
   include ApplicationHelper
   include NewUrlHelper
 
   def index
-    @urls = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
-              order(created_at: :desc).page(params[:page])
+    @urls = Shortener::ShortenedUrl
+    if @current_domain
+      @urls = @urls.where(domain_name: @current_domain)
+    end
+    if params[:query].present?
+      @urls = @urls.where("unique_key iLIKE ?", "%#{params[:query]}%")
+    end
+    @urls = @urls.order(created_at: :desc).page(params[:page])
   end
 
   def new
-    @url = Shortener::ShortenedUrl.new(domain_name: request.server_name.downcase)
+    @url = Shortener::ShortenedUrl.new(domain_name: @request_domain)
   end
 
   def edit
   end
 
   def create
-    
-    urls = create_shortenURL(params['url'], params['unique_key'])
-    
-    @url = urls[:short_url]
-    url = urls[:url]
+    url_to_shorten = params[:url]
+    is_url_working = URLValidator.new(url: url_to_shorten).works?
+    domains = params[:domain_name]
+    unique_key = params[:unique_key]
 
-    # This logic all really belongs in the Shortener::ShortenedUrl model.  This
-    # ugliness seems to be a sign that we should fork that gem and extend it.
-    if url.works?
-      unless params['unique_key'].blank?
-        if params['unique_key'] =~ /\A[a-zA-Z0-9]+\Z/
-          if Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
-            where("lower(unique_key) = ?", params['unique_key'].downcase).exists?
-
-            @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
-            @url.errors[:base] << 'That short code already exists.'
+    urls_with_errors = domains.map do |domain|
+      url = Shortener::ShortenedUrl.new url_params
+      if is_url_working
+        if unique_key.present?
+          if unique_key =~ /\A[a-zA-Z0-9]+\Z/
+            if Shortener::ShortenedUrl.where(domain_name: domain).
+                where("lower(unique_key) = ?", unique_key.downcase).exists?
+              url.errors[:base] << "That short code already exists for #{domain}."
+            end
           else
-            @url = Shortener::ShortenedUrl.generate(url.to_s)
-            @url.unique_key = params['unique_key']
-            @url.domain_name = request.server_name.downcase
-            @url.save
+            url.errors[:base] << 'Short codes can only include numbers and letters.'
           end
-        else
-          @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
-          @url.errors[:base] << 'Short codes can only include numbers and letters.'
         end
+        url
       else
-        @url = Shortener::ShortenedUrl.generate(url.to_s)
-        @url.domain_name = request.server_name.downcase
+        url.errors[:base] << 'That URL doesn\'t seem to work.'
       end
-    else
-      @url = Shortener::ShortenedUrl.new url: params['url'], domain_name: request.server_name.downcase
-      @url.errors[:base] << 'That URL doesn\'t seem to work.'
+    end.select do |url|
+      url.errors.present?
     end
 
     respond_to do |format|
-      if url.works? and @url.errors.messages.empty?
-        format.html { redirect_to @url }
-        format.json { render :show, status: :created, location: @url }
+      if urls_with_errors.empty?
+        urls = domains.map do |domain|
+          url = Shortener::ShortenedUrl.create url: url_to_shorten
+          url.unique_key = unique_key if unique_key.present?
+          url.domain_name = domain
+          url.save
+          url
+        end
+        format.html { redirect_to root_url }
+        format.json { render :index, status: :created, location: urls }
       else
+        @url = urls_with_errors.first
         format.html { render :new }
         format.json { render json: @url.errors, status: :unprocessable_entity }
       end
@@ -89,7 +95,7 @@ class UrlsController < ApplicationController
     token = /^([#{Shortener.key_chars.join}]*).*/i.match(params[:id])[1]
 
     # pull the link out of the db
-    url = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).
+    url = Shortener::ShortenedUrl.where(domain_name: @request_domain).
             where("lower(unique_key) = ?", token.downcase).first
 
     if url
@@ -113,7 +119,7 @@ class UrlsController < ApplicationController
   private
 
   def set_url
-    @url = Shortener::ShortenedUrl.where(domain_name: request.server_name.downcase).find(params[:id])
+    @url = Shortener::ShortenedUrl.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -123,6 +129,14 @@ class UrlsController < ApplicationController
       :unique_key,
       :utm_source, :utm_medium, :utm_term, :utm_content, :utm_name
     )
+  end
+
+  def load_domains
+    @current_domain = session[:domain_name]
+    @request_domain = request.server_name.downcase
+    @domains = Shortener::ShortenedUrl.select(:domain_name).where("domain_name is not null").
+                distinct(:domain_name).map(&:domain_name)
+    @domains << @request_domain unless @domains.include?(@request_domain)
   end
 
 end
