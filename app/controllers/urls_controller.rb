@@ -110,6 +110,12 @@ class UrlsController < ApplicationController
     end
   end
 
+  def search
+    @urls = Shortener::ShortenedUrl.where('url LIKE ?', "%#{params[:q]}%").all.page(params[:page])
+
+    return @urls
+  end
+
   private
 
   def set_url

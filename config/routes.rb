@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
+  get '/search' => "urls#search"
+
   get '/:id' => "urls#expand"
   get 'api/update.:format' => 'new_url#api_update'
   post 'new_url/create.:format' => 'new_url#create'
