@@ -1,5 +1,5 @@
 FROM ruby:2.2.0
-MAINTAINER Derek Norrbom <dnorrbom@hakkasan.com>
+LABEL MAINTAINER="Derek Norrbom <dnorrbom@hakkasan.com>"
 
 RUN printf "deb http://archive.debian.org/debian/ jessie main\ndeb-src http://archive.debian.org/debian/ jessie main\ndeb http://security.debian.org jessie/updates main\ndeb-src http://security.debian.org jessie/updates main" > /etc/apt/sources.list
 
@@ -9,7 +9,7 @@ RUN apt-get update -qq && apt-get install -y build-essential
 RUN apt-get install -y libpq-dev
 
 # for a JS runtime
-RUN apt-get install -y nodejs
+RUN apt-get install -y nodejs --force-yes
 
 ENV APP_HOME /myapp
 RUN mkdir $APP_HOME
