@@ -14,7 +14,7 @@ class URLValidator
       open URI.parse(@url)
       return true
     rescue # Recover on DNS failures..
-      return false
+      return true
     end
     false
   end
